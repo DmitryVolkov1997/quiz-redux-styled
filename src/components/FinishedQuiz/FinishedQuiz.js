@@ -4,6 +4,7 @@ import {IoClose, IoChevronDownSharp} from "react-icons/io5";
 import classes from "./FinishedQuiz.module.scss";
 import {onRetryHandler} from "../../store/quizSlice/quizSlice";
 import {useDispatch} from "react-redux";
+import {Link} from "react-router-dom";
 
 const Wrapper = styled.div`
   padding: 2.5rem 3rem 2.5rem 3rem;
@@ -46,6 +47,10 @@ const Border = styled.div`
   margin-top: 2.5rem;
 `;
 
+const ListLink = styled(Link)`
+  color: #ffffff;
+`;
+
 const FinishedQuiz = ({results, quiz}) => {
     const dispatch = useDispatch();
     const successCount = Object.keys(results).reduce((total, key) => {
@@ -81,7 +86,9 @@ const FinishedQuiz = ({results, quiz}) => {
               <ButtonGroup>
                   <Button primary p={".9rem 1.7rem .9rem 1.7rem"}
                           onClick={() => dispatch(onRetryHandler())}>Повторить</Button>
-                  <Button success p={".9rem 1.7rem .9rem 1.7rem"}>Перейти в список тестов</Button>
+                  <Button success p={".9rem 1.7rem .9rem 1.7rem"}>
+                      <ListLink to="/">Перейти в список тестов</ListLink>
+                  </Button>
               </ButtonGroup>
           </Border>
       </Wrapper>
