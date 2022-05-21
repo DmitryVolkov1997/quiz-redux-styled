@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import React, {Component} from "react";
 import {Button} from "../UI/Button/Button";
-import Input from "../UI/Input/Input";
 import {createControl, validateForm, validate} from "../../form/formFramework";
 import Auxillary from "../Auxillary/Auxillary";
 import {CustomSelect} from "../UI/CustomSelect/CustomSelect";
 import axios from "../../axios/axios-quiz";
+import Input from "../UI/Input/Input";
 
 const Wrapper = styled.div`
   display: flex;
@@ -42,6 +42,7 @@ const ButtonGroup = styled.div`
   margin-top: 1rem;
 `;
 
+
 function createOptionControl(number) {
     return createControl({
         label: `Вариант ${number}`,
@@ -77,7 +78,9 @@ export default class QuizCreator extends Component {
         quiz: [],
         isFormValid: false,
         rightAnswerId: 1,
-        formControls: createFormControls()
+        formControls: createFormControls(),
+        titles: "",
+        InoutTitleValue: "",
     };
 
     submitHandler = (e) => {
@@ -96,6 +99,7 @@ export default class QuizCreator extends Component {
             question: question.value,
             id: index,
             rightAnswerId: this.state.rightAnswerId,
+            titles: this.state.titles,
             answers: [
                 {text: option1.value, id: option1.id},
                 {text: option2.value, id: option2.id},
@@ -173,12 +177,36 @@ export default class QuizCreator extends Component {
         });
     };
 
+    handleInputValue = (e) => {
+        this.setState(
+          {
+              inputTitleValue: e.target.value,
+          },
+          () => this.onChangeTitle()
+        );
+    };
+
+    onChangeTitle = (e) => {
+        this.setState({
+            titles: this.state.inputTitleValue,
+        });
+    };
+
     render() {
         return (
           <Wrapper>
               <Body>
                   <Title>Создать тест</Title>
                   <Form onSubmit={this.submitHandler}>
+                      <div>
+                          <Input
+                            onChange={this.handleInputValue}
+                            value={this.state.inputTitleValue}
+                            label="Название предмета"
+                          />
+                          <Button style={{width: "100%", margin: "1rem 0 2rem"}} p={".9rem 1.7rem .9rem 1.7rem"}
+                                  primary>Добавить заголовок</Button>
+                      </div>
                       {this.renderControls()}
                       <CustomSelect options={options}
                                     placeholder="Выберите правильный ответ"

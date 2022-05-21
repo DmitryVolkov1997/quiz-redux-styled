@@ -117,7 +117,7 @@ const QuizList = () => {
                 Object.keys(data.data).forEach((key, i) => {
                     quizes.push({
                         id: key,
-                        name: `Тест - ${i + 1}`
+                        name: `${data.data[key][0].titles ? data.data[key][0].titles : "Тест"}`
                     });
                 });
                 setQuizes(quizes);
