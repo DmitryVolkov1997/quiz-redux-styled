@@ -5,6 +5,7 @@ import Input from "../UI/Input/Input";
 import {createControl, validateForm, validate} from "../../form/formFramework";
 import Auxillary from "../Auxillary/Auxillary";
 import {CustomSelect} from "../UI/CustomSelect/CustomSelect";
+import axios from "../../axios/axios-quiz";
 
 const Wrapper = styled.div`
   display: flex;
@@ -113,10 +114,28 @@ export default class QuizCreator extends Component {
         });
     };
 
-    createQuizHandler = (e) => {
+    createQuizHandler = async (e) => {
         e.preventDefault();
-        console.log(this.state.quiz);
+        try {
+            await axios.post("/quizes.json", this.state.quiz);
+            this.setState({
+                quiz: [],
+                isFormValid: false,
+                rightAnswerId: 1,
+                formControls: createFormControls()
+            });
+        } catch (e) {
+            console.log(e);
+        }
     };
+
+    // createQuizHandler = (e) => {
+    //     e.preventDefault();
+    //
+    //     axios.post("https://react-quize-1ad48-default-rtdb.firebaseio.com/quizes.json", this.state.quiz)
+    //     .then(response => console.log(response))
+    //     .catch(error => console.log(error));
+    // };
 
     changeHandler = (value, controlName) => {
         const formControls = {...this.state.formControls};

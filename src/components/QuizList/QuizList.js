@@ -1,6 +1,12 @@
 import styled from "styled-components";
 import {NavLink} from "react-router-dom";
 import {IoChevronForwardOutline, IoSchoolOutline} from 'react-icons/io5';
+import {useEffect, useState} from "react";
+import axios from "../../axios/axios-quiz";
+import Loader from "../UI/Loader/Loader";
+
+import {useDispatch} from "react-redux";
+import {onRetryHandler} from "../../store/quizSlice/quizSlice";
 
 
 const Wrapper = styled.div`
@@ -13,9 +19,7 @@ const Wrapper = styled.div`
   color: var(--colors-text);
 `;
 
-const List = styled.ul`
-
-`;
+const List = styled.ul``;
 
 const ListItem = styled.li`
   margin-bottom: 1rem;
@@ -82,17 +86,21 @@ const Title = styled.h1`
   font-size: var(--fs-md);
   color: var(--colors-text);
   margin: 0rem 0rem 2rem 0rem;
+  text-align: center;
 `;
 
-
 const QuizList = () => {
+    const [quizes, setQuizes] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const dispatch = useDispatch();
+
     const renderQuizes = () => {
-        return [1, 2, 3].map((quiz, i) => {
+        return quizes.map((quiz) => {
             return (
-              <ListItem key={i}>
-                  <ListLink to={"/quiz/" + quiz}>
+              <ListItem key={quiz.id} onClick={() => dispatch(onRetryHandler())}>
+                  <ListLink to={"/quiz/" + quiz.id}>
                       <IoSchoolOutline className={"img"}/>
-                      Тест {quiz}
+                      {quiz.name}
                       <IoChevronForwardOutline className={"goTo"}/>
                   </ListLink>
               </ListItem>
@@ -100,13 +108,35 @@ const QuizList = () => {
         });
     };
 
+    useEffect(() => {
+        try {
+            const fetchData = async () => {
+                const data = await axios.get("/quizes.json");
+                const quizes = [];
+
+                Object.keys(data.data).forEach((key, i) => {
+                    quizes.push({
+                        id: key,
+                        name: `Тест - ${i + 1}`
+                    });
+                });
+                setQuizes(quizes);
+                setLoading(false);
+            };
+            fetchData()
+            .catch(console.error);
+        } catch (e) {
+            console.log(e);
+        }
+    }, []);
+
     return (
       <Wrapper>
           <Container>
               <Title>Список тестов</Title>
 
               <List>
-                  {renderQuizes()}
+                  {loading ? <Loader/> : renderQuizes()}
               </List>
           </Container>
       </Wrapper>

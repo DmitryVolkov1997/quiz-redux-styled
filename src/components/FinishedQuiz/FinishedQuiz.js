@@ -86,7 +86,7 @@ const FinishedQuiz = ({results, quiz}) => {
               <ButtonGroup>
                   <Button primary p={".9rem 1.7rem .9rem 1.7rem"}
                           onClick={() => dispatch(onRetryHandler())}>Повторить</Button>
-                  <Button success p={".9rem 1.7rem .9rem 1.7rem"}>
+                  <Button success p={".9rem 1.7rem .9rem 1.7rem"} onClick={() => dispatch(onRetryHandler())}>
                       <ListLink to="/">Перейти в список тестов</ListLink>
                   </Button>
               </ButtonGroup>

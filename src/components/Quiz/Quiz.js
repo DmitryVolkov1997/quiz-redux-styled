@@ -1,7 +1,13 @@
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import styled from "styled-components";
 import ActiveQuiz from "../ActiveQuiz/ActiveQuiz";
 import FinishedQuiz from "../FinishedQuiz/FinishedQuiz";
+import {useParams} from "react-router-dom";
+import {useEffect} from "react";
+import axios from "../../axios/axios-quiz";
+import Loader from "../UI/Loader/Loader";
+import {setQuiz} from "../../store/quizSlice/quizSlice";
+import {setLoading} from "../../store/quizSlice/quizSlice";
 
 const Wrapper = styled.div`
   display: flex;
@@ -24,18 +30,54 @@ const Box = styled.div`
 `;
 
 const Quiz = () => {
-    const {quiz = [], activeQuestion, answerState, isFinishedQuiz, results} = useSelector(state => state.quiz);
+    const {
+        quiz = [],
+        activeQuestion,
+        answerState,
+        isFinishedQuiz,
+        results,
+        loading,
+    } = useSelector(state => state.quiz);
+    const dispatch = useDispatch();
+
+    const {id} = useParams();
+
+    useEffect(() => {
+        try {
+            const fetchData = async () => {
+                const data = await axios.get(`/quizes/${id}.json`);
+                const quiz = data.data;
+                dispatch(setQuiz({quiz}));
+                dispatch(setLoading(false));
+            };
+            fetchData()
+            .catch(console.error);
+        } catch (e) {
+            console.log(e);
+        }
+    }, []);
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const response = await axios.get(`/quizes/${id}.json`);
+    //         const data = response.data;
+    //         dispatch(setQuiz({quiz: data}));
+    //         dispatch(setLoading(false));
+    //     };
+    //     fetchData()
+    //     .catch(console.error);
+    // }, []);
 
     return (
       <Wrapper>
           <Box>
               <QuizTitle>Ответьте на все вопросы</QuizTitle>
               {
-                  !isFinishedQuiz ?
+                  loading ? <Loader/> : isFinishedQuiz ? <FinishedQuiz results={results} quiz={quiz}/> :
                     <ActiveQuiz answers={quiz[activeQuestion].answers} question={quiz[activeQuestion].question}
                                 quizLength={quiz.length}
-                                answerNumber={activeQuestion + 1} state={answerState}/> :
-                    <FinishedQuiz results={results} quiz={quiz}/>
+                                answerNumber={activeQuestion + 1} state={answerState}/>
+
               }
           </Box>
       </Wrapper>
