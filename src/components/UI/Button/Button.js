@@ -16,6 +16,11 @@ export const Button = styled.button`
   transition: box-shadow .22s ease-in-out;
   text-transform: uppercase;
 
+  @media (max-width: 767px) {
+    width: ${props => props.full ? "100%" : null};
+  }
+
+
   &:disabled {
     background-color: #5c636a;
     border-color: #565e64;

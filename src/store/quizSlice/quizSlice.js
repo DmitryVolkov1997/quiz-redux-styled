@@ -137,7 +137,7 @@ const quizSlice = createSlice({
         },
         menuCloseHandler(state, {payload}) {
             state.menu = false;
-        }
+        },
     }
 });
 
