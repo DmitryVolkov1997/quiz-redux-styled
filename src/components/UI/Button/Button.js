@@ -26,6 +26,7 @@ export const Button = styled.button`
     border-color: #565e64;
     cursor: not-allowed;
 
+
     &:hover {
       color: #fff;
       background-color: #5c636a;

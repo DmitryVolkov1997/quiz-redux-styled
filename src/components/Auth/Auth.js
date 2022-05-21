@@ -150,9 +150,9 @@ export default class Auth extends Component {
                   <Form onSubmit={this.submitHandler}>
                       {this.renderInputs()}
                       <ButtonGroup>
-                          <Button full success p={".9rem 1.7rem .9rem 1.7rem"}
+                          <Button disabled={!this.state.isFormValid} full success p={".9rem 1.7rem .9rem 1.7rem"}
                                   onClick={this.loginHandler}>Войти</Button>
-                          <Button full primary p={".9rem 1.7rem .9rem 1.7rem"}
+                          <Button disabled={!this.state.isFormValid} full primary p={".9rem 1.7rem .9rem 1.7rem"}
                                   onClick={this.registerHandler}>Зарегистрироваться</Button>
                       </ButtonGroup>
                   </Form>
