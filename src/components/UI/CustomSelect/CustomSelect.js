@@ -9,6 +9,7 @@ export const CustomSelect = styled(Select).attrs({
             border: "1px solid rgb(226,232,240)",
             height: "45px",
             fontSize: "14px",
+            fontWeight:"var(--fw-medium)",
         }),
         option: (provided, state) => ({
             ...provided,
