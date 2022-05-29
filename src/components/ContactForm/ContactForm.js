@@ -2,6 +2,8 @@ import styled from "styled-components"
 import {useForm, Controller} from 'react-hook-form';
 import Select from 'react-select';
 import axios from 'axios';
+import PhoneInput, {isValidPhoneNumber} from 'react-phone-number-input';
+import "react-phone-number-input/style.css";
 
 const Wrapper = styled.div`
   display: flex;
@@ -33,6 +35,38 @@ const Input = styled.input`
   &:focus {
     border-color: rgb(49, 130, 206);
     box-shadow: rgb(49 130 206) 0px 0px 0px 1px;
+  }
+`
+
+const Phone = styled(PhoneInput)`
+  font-family: var(--family) !important;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  display: block;
+  border: 1px solid rgb(226, 232, 240);
+  border-radius: 0.25rem;
+  padding: 1rem;
+  margin: 0 0 1rem;
+  width: 100%;
+  transition: all 300ms ease-in-out;
+  display: flex;
+  
+  & > input {
+    font-family: var(--family);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    margin-left: 10px;
+  }
+
+  &:focus {
+    border-color: rgb(49, 130, 206);
+    box-shadow: rgb(49 130 206) 0px 0px 0px 1px;
+  }
+  
+  &::placeholder {
+    font-family: var(--family);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
   }
 `
 
@@ -325,7 +359,8 @@ const ContactForm = () => {
                 "Язык обучения": data.language,
                 "Кафедра-консультант": data.manager,
                 "Вопрос": data.question,
-                "Дата рождения": data.birthday
+                "Дата рождения": data.birthday,
+                "Телефон": data["phone-input"],
             }]);
             reset()
         } catch (e) {
@@ -403,6 +438,28 @@ const ContactForm = () => {
                   </Label>
                   <ErrorMessage>
                       {errors?.email && <p>{errors?.email?.message || "Error!"}</p>}
+                  </ErrorMessage>
+
+                  <Controller
+                    name="phone-input"
+                    control={control}
+                    rules={{
+                        validate: (value) => isValidPhoneNumber(value)
+                    }}
+                    render={({field: {onChange, value}}) => (
+                      <Phone
+                        value={value}
+                        onChange={onChange}
+                        defaultCountry="KZ"
+                        id="phone-input"
+                        placeholder="Телефон"
+                      />
+                    )}
+                  />
+                  <ErrorMessage>
+                      {errors["phone-input"] && (
+                        <p className="error-message">Недействительный телефон</p>
+                      )}
                   </ErrorMessage>
 
                   <Controller
