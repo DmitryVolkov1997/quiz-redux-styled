@@ -3,7 +3,6 @@ import MenuToggle from "../Navigation/MenuToggle/MenuToggle";
 import {useDispatch, useSelector} from "react-redux";
 import {toggleMenuHandler} from "../../store/quizSlice/quizSlice";
 import Drawer from "../Navigation/Drawer/Drawer";
-import {onRetryHandler} from "../../store/quizSlice/quizSlice";
 
 const Wrapper = styled.div`
   height: 100vh;

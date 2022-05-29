@@ -1,7 +1,6 @@
 import {Route, Routes} from "react-router-dom";
 import Layout from "../Layout/Layout";
 import Quiz from "../Quiz/Quiz";
-import Auth from "../Auth/Auth";
 import QuizCreator from "../QuizCreator/QuizCreator";
 import QuizList from "../QuizList/QuizList";
 import ContactForm from '../ContactForm/ContactForm';
@@ -12,7 +11,7 @@ function App() {
       <div className="App">
           <Layout>
               <Routes>
-                  <Route path="/auth" element={<Auth/>}/>
+                  <Route path="/auth" element={<ContactForm/>}/>
                   <Route path="/quiz-creator" element={<QuizCreator/>}/>
                   <Route path="/quiz/:id" element={<Quiz/>}/>
                   <Route path="/contact-form" element={<ContactForm/>}/>

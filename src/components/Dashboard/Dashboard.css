@@ -18,3 +18,17 @@ table.iksweb th {
     color: #fff;
     font-weight: normal;
 }
+
+.button-excel {
+    background-color: rgb(43, 108, 176);
+    color: #fff;
+    cursor: pointer;
+    padding: 1.2rem;
+    border-radius: .6rem;
+    font-family: var(--family);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    width: 100%;
+    margin-top: 2rem;
+    max-width: 300px;
+}

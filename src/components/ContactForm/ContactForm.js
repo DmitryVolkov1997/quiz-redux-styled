@@ -304,12 +304,10 @@ const optionsManager = [
 
 const ContactForm = () => {
     const {register, control, formState: {errors}, handleSubmit, reset} = useForm({mode: "onChange"})
-    const methods = useForm()
     const onSubmit = async (data) => {
         console.log(data)
         try {
             await axios.post("https://contact-form-2d4a6-default-rtdb.firebaseio.com/contact.json", [{
-
                 Имя: data.firstName,
                 Фамилия: data.lastName,
                 Отчество: data.patronymic,

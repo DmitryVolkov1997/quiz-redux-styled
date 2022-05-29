@@ -12,6 +12,9 @@ const links = [{
     },
     {
         to: '/quiz-creator', label: "Создать тест"
+    },
+    {
+        to: '/dashboard', label: "Админка"
     }];
 
 const Drawer = ({isOpen}) => {

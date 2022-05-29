@@ -1,8 +1,5 @@
 import styled from 'styled-components'
 import {NavLink} from 'react-router-dom'
-import {useEffect} from 'react';
-import axios from 'axios';
-import {useState} from 'react';
 
 const Wrapper = styled.div`
   position: relative;
@@ -42,8 +39,6 @@ const Link = styled(NavLink).attrs({
 `
 
 const SuccessLogin = e => {
-
-
     return (
       <Wrapper>
           <GroupTitle>

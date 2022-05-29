@@ -1,7 +1,7 @@
-import styled from 'styled-components';
 import "./Dashboard.css"
 import {useEffect, useState} from 'react';
 import axios from 'axios';
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
 
 const Dashboard = () => {
     const [userData, setUserData] = useState([])
@@ -26,8 +26,8 @@ const Dashboard = () => {
     let headings = userData.length && Object.keys(userData[0])
 
     return (
-      <div>
-          <table className="iksweb">
+      <div style={{marginTop: "100px", display: "flex", flexDirection: "column", alignItems: "center"}}>
+          <table className="iksweb" id="emp-table">
               <thead>
               <tr>
                   {
@@ -37,8 +37,8 @@ const Dashboard = () => {
               </thead>
               <tbody>
               {
-                  userData.map(item =>
-                    <tr>
+                  userData.map((item, i) =>
+                    <tr key={i}>
                         {
                             headings.length ? headings.map((heading, i) => <td key={i}>{item[heading]}</td>) : null
                         }
@@ -47,6 +47,13 @@ const Dashboard = () => {
               }
               </tbody>
           </table>
+          <ReactHTMLTableToExcel
+            table="emp-table"
+            filename="excel file"
+            sheet="Sheet"
+            buttonText="Экспортировать в Excel"
+            className={"button-excel"}
+          />
       </div>
     );
 };
