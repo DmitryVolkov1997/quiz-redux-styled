@@ -2,8 +2,10 @@ import styled from "styled-components"
 import {useForm, Controller} from 'react-hook-form';
 import Select from 'react-select';
 import axios from 'axios';
-import PhoneInput, {isValidPhoneNumber} from 'react-phone-number-input';
+// import PhoneInput, {isValidPhoneNumber, isPossiblePhoneNumber} from 'react-phone-number-input';
+import PhoneInputWithCountry from "react-phone-number-input/react-hook-form"
 import "react-phone-number-input/style.css";
+import {isPossiblePhoneNumber} from 'react-phone-number-input';
 
 const Wrapper = styled.div`
   display: flex;
@@ -18,6 +20,10 @@ const Body = styled.div`
   box-shadow: var(--shadow);
   padding: 2.5rem 4rem;
   border-radius: var(--radius);
+
+  @media (max-width: 768px) {
+    padding: 2rem 1.5rem;
+  }
 `;
 
 const Input = styled.input`
@@ -28,17 +34,25 @@ const Input = styled.input`
   border: 1px solid rgb(226, 232, 240);
   border-radius: 0.25rem;
   padding: 1rem;
-  margin: 0 0 1rem;
+  //margin: 0 0 1rem;
   width: 100%;
   transition: all 300ms ease-in-out;
+  margin-top: 2.5rem;
+  font-size: 1.4rem;
 
   &:focus {
     border-color: rgb(49, 130, 206);
     box-shadow: rgb(49 130 206) 0px 0px 0px 1px;
   }
+
+  //@media (max-width: 768px) {
+  //  &::placeholder {
+  //    font-size: 1.2rem;
+  //  }
+  //}
 `
 
-const Phone = styled(PhoneInput)`
+const Phone = styled(PhoneInputWithCountry)`
   font-family: var(--family) !important;
   font-size: var(--fs-sm);
   font-weight: var(--fw-medium);
@@ -46,11 +60,11 @@ const Phone = styled(PhoneInput)`
   border: 1px solid rgb(226, 232, 240);
   border-radius: 0.25rem;
   padding: 1rem;
-  margin: 0 0 1rem;
+  margin: 2.5rem 0;
   width: 100%;
   transition: all 300ms ease-in-out;
   display: flex;
-  
+
   & > input {
     font-family: var(--family);
     font-size: var(--fs-sm);
@@ -62,12 +76,12 @@ const Phone = styled(PhoneInput)`
     border-color: rgb(49, 130, 206);
     box-shadow: rgb(49 130 206) 0px 0px 0px 1px;
   }
-  
-  &::placeholder {
-    font-family: var(--family);
-    font-size: var(--fs-sm);
-    font-weight: var(--fw-medium);
-  }
+
+  //&::placeholder {
+  //  font-family: var(--family);
+  //  font-size: var(--fs-sm);
+  //  font-weight: var(--fw-medium);
+  //}
 `
 
 const Title = styled.h1`
@@ -97,37 +111,46 @@ const InputSubmit = styled.input`
 `
 
 const ErrorMessage = styled.div`
-  height: 2rem;
 
   & > p {
+    margin: .5rem 0px;
     color: rgb(197, 48, 48);
     font-weight: var(--fw-medium);
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
   }
 `
-
 const SelectEl = styled(Select).attrs({
     styles: {
-        control: (provided) => ({
+        control: (provided, state) => ({
             ...provided,
             borderRadius: "var(--radius)",
             border: "1px solid rgb(226,232,240)",
             height: "45px",
             fontSize: "var(--fs-sm)",
             fontWeight: "var(--fw-medium)",
+            wordWrap: "break-word",
         }),
         option: (provided, state) => ({
             ...provided,
             cursor: "pointer",
+            wordWrap: "break-word",
         }),
+        placeholder: (provided, state) => ({
+            ...provided,
+            wordWrap: "break-word",
+            fontSize: "1.4rem"
+        })
     }
 })`
-  margin-bottom: 3rem;
+  margin: 2.5rem 0;
 `;
 
 const Textarea = styled.textarea`
   width: 100%;
   font-family: var(--family);
-  font-size: var(--fs-sm);
+  font-size: 1.4rem;
   font-weight: var(--fw-medium);
   display: block;
   border: 1px solid rgb(226, 232, 240);
@@ -142,6 +165,12 @@ const Textarea = styled.textarea`
     border-color: rgb(49, 130, 206);
     box-shadow: rgb(49 130 206) 0px 0px 0px 1px;
   }
+
+  //@media (max-width: 768px) {
+  //  &::placeholder {
+  //    font-size: 1.2rem;
+  //  }
+  //}
 `;
 
 const optionsRegion = [
@@ -339,13 +368,12 @@ const optionsManager = [
 const ContactForm = () => {
     const {register, control, formState: {errors}, handleSubmit, reset} = useForm({mode: "onChange"})
     const onSubmit = async (data) => {
-        console.log(data)
         try {
             await axios.post("https://contact-form-2d4a6-default-rtdb.firebaseio.com/contact.json", [{
-                Имя: data.firstName,
-                Фамилия: data.lastName,
-                Отчество: data.patronymic,
-                Email: data.email,
+                Имя: data.firstName.slice(0, 1).toUpperCase() + data.firstName.slice(1).toLowerCase(),
+                Фамилия: data.lastName.slice(0, 1).toUpperCase() + data.lastName.slice(1).toLowerCase(),
+                Отчество: data.patronymic.slice(0, 1).toUpperCase() + data.patronymic.slice(1).toLowerCase(),
+                Email: data.email.toLowerCase(),
                 Регион: data.region,
                 "Социальный стутус": data.socialStatus,
                 "Предполагаемая форма оплаты за обучение в ВУЗе": data.payment,
@@ -360,9 +388,9 @@ const ContactForm = () => {
                 "Кафедра-консультант": data.manager,
                 "Вопрос": data.question,
                 "Дата рождения": data.birthday,
-                "Телефон": data["phone-input"],
+                "Телефон": data["phone-input"]
             }]);
-            reset()
+            // reset()
         } catch (e) {
             console.log(e);
         }
@@ -440,27 +468,38 @@ const ContactForm = () => {
                       {errors?.email && <p>{errors?.email?.message || "Error!"}</p>}
                   </ErrorMessage>
 
-                  <Controller
+                  {/*<Controller*/}
+                  {/*  name="phone-input"*/}
+                  {/*  control={control}*/}
+                  {/*  rules={{*/}
+                  {/*      validate: (value) => isPossiblePhoneNumber(value)*/}
+                  {/*  }}*/}
+                  {/*  render={({field: {onChange, value}}) => (*/}
+                  {/*    <Phone*/}
+                  {/*      value={value}*/}
+                  {/*      onChange={onChange}*/}
+                  {/*      defaultCountry="KZ"*/}
+                  {/*      id="phone-input"*/}
+                  {/*      placeholder="Телефон"*/}
+                  {/*    />*/}
+                  {/*  )}*/}
+                  {/*/>*/}
+                  {/*<ErrorMessage>*/}
+                  {/*    {errors["phone-input"] && (*/}
+                  {/*      <p className="error-message">Недействительный телефон</p>*/}
+                  {/*    )}*/}
+                  {/*</ErrorMessage>*/}
+                  <Phone
                     name="phone-input"
                     control={control}
-                    rules={{
-                        validate: (value) => isValidPhoneNumber(value)
-                    }}
-                    render={({field: {onChange, value}}) => (
-                      <Phone
-                        value={value}
-                        onChange={onChange}
-                        defaultCountry="KZ"
-                        id="phone-input"
-                        placeholder="Телефон"
-                      />
-                    )}
-                  />
+                    defaultCountry="KZ"
+                    rules={{required: true, validate: (value) => isPossiblePhoneNumber(value)}}/>
                   <ErrorMessage>
                       {errors["phone-input"] && (
                         <p className="error-message">Недействительный телефон</p>
                       )}
                   </ErrorMessage>
+
 
                   <Controller
                     control={control}
@@ -574,7 +613,7 @@ const ContactForm = () => {
                     name="educationProgram"
                     render={({field: {onChange, value, name, ref}}) => (
                       <SelectEl
-                        placeholder="Болжамдық білім беру бағдарламасы (Предполагаемая образовательная программа)"
+                        placeholder="Предполагаемая образовательная программа"
                         inputRef={ref}
                         classNamePrefix="addl-class"
                         options={optionsEducationProgram}
