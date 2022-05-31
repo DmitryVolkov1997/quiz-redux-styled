@@ -15,7 +15,7 @@ const Dashboard = () => {
                 const contacts = []
                 const data = await axios.get("https://contact-form-2d4a6-default-rtdb.firebaseio.com/contact.json");
                 Object.keys(data.data).forEach((key, i) => {
-                    contacts.push(data.data[key][0])
+                    contacts.unshift(data.data[key][0])
                     // console.log(data.data[key][0])
                 })
                 setUserData(contacts)

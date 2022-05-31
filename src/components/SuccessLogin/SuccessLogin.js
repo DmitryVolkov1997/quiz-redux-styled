@@ -18,6 +18,7 @@ const Wrapper = styled.div`
   margin-bottom: 1.5rem;
   flex-grow: 1;
   padding-top: 10rem;
+  margin: 0;
 `
 
 const GroupTitle = styled.div`

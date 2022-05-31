@@ -5,6 +5,7 @@ const GroupButton = styled.div`
   margin-top: 2rem;
   overflow-x: auto;
   max-width: 400px;
+  gap: .2rem;
 `
 
 const Button = styled.button`
@@ -15,11 +16,15 @@ const Button = styled.button`
   font-size: var(--fs-sm);
   font-weight: var(--fw-medium);
   color: var(--colors-text);
-  border: 1px solid rgb(226,232,240);
+  border: 2px solid rgb(226,232,240);
   background-color: transparent;
   cursor: pointer;
+  transition: all 300ms ease-in-out;
+  
+  &:focus {
+    border-color: rgb(49,130,206);
+  }
 `
-
 const DashboardPagination = ({dataPerPage, totalData, paginate}) => {
     const pagesNumbers = []
 
