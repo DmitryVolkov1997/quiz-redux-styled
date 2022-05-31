@@ -8,6 +8,7 @@ import "react-phone-number-input/style.css";
 import {isPossiblePhoneNumber} from 'react-phone-number-input';
 import {useNavigate} from "react-router-dom"
 import {useState} from 'react';
+import logo from "../../img/logo.png";
 
 const Main = styled.div`
   display: flex;
@@ -25,6 +26,7 @@ const Wrapper = styled.div`
   }
 `
 const MainTitle = styled.h1`
+  position: relative;
   font-size: var(--fs-md);
   font-weight: var(--fw-bold);
   font-style: italic;
@@ -37,7 +39,23 @@ const MainTitle = styled.h1`
     font-size: var(--fs-sm);
     font-weight: var(--fw-medium);
     margin-top: 1rem;
+    margin-bottom: 2rem;
   }
+  
+  & > img {
+    top: .5rem;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    object-position: center;
+  }
+  
+  //& > img {
+  //  position: absolute;
+  //  left: -10rem;
+  //  width: 100px;
+  //  height: 100px;
+  //}
 
   @media (max-width: 768px) {
     display: none;
@@ -420,6 +438,7 @@ const ContactForm = () => {
               <p>
                   барлық деректерді жеке куәлік бойынша толтыру қажет / все данные заполнять по удостоверению личности*
               </p>
+              <img src={logo} alt="логотип kstu"/>
           </MainTitle>
           <Wrapper>
               <Body>
