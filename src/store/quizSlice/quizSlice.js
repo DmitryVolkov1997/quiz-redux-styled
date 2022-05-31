@@ -10,6 +10,7 @@ const quizSlice = createSlice({
         menu: false,
         isFinishedQuiz: false,
         loading: true,
+        showModal: false
     },
     reducers: {
         onAnswerClickHandler(state, {payload}) {
@@ -63,6 +64,9 @@ const quizSlice = createSlice({
         setLoading(state, {payload}) {
             state.loading = payload;
         },
+        setShowModal(state, {payload}) {
+            state.showModal = true
+        }
     }
 });
 
@@ -72,6 +76,7 @@ export const {
     toggleMenuHandler,
     menuCloseHandler,
     setQuiz,
-    setLoading
+    setLoading,
+    setShowModal
 } = quizSlice.actions;
 export default quizSlice.reducer;

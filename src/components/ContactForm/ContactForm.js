@@ -6,12 +6,42 @@ import axios from 'axios';
 import PhoneInputWithCountry from "react-phone-number-input/react-hook-form"
 import "react-phone-number-input/style.css";
 import {isPossiblePhoneNumber} from 'react-phone-number-input';
+import {useNavigate} from "react-router-dom"
+import {useState} from 'react';
 
+const Main = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
-  padding-top: 10rem;
+  padding-top: 5rem;
   width: 100%;
+
+  @media (max-width: 991px) {
+    padding-top: 10rem;
+  }
+`
+const MainTitle = styled.h1`
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  font-style: italic;
+  max-width: 1110px;
+  text-align: center;
+  border-bottom: 1px solid rgb(226, 232, 240);
+  padding-bottom: 2rem;
+
+  & > p {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `
 
 const Body = styled.div`
@@ -34,7 +64,6 @@ const Input = styled.input`
   border: 1px solid rgb(226, 232, 240);
   border-radius: 0.25rem;
   padding: 1rem;
-  //margin: 0 0 1rem;
   width: 100%;
   transition: all 300ms ease-in-out;
   margin-top: 2.5rem;
@@ -44,12 +73,6 @@ const Input = styled.input`
     border-color: rgb(49, 130, 206);
     box-shadow: rgb(49 130 206) 0px 0px 0px 1px;
   }
-
-  //@media (max-width: 768px) {
-  //  &::placeholder {
-  //    font-size: 1.2rem;
-  //  }
-  //}
 `
 
 const Phone = styled(PhoneInputWithCountry)`
@@ -76,12 +99,6 @@ const Phone = styled(PhoneInputWithCountry)`
     border-color: rgb(49, 130, 206);
     box-shadow: rgb(49 130 206) 0px 0px 0px 1px;
   }
-
-  //&::placeholder {
-  //  font-family: var(--family);
-  //  font-size: var(--fs-sm);
-  //  font-weight: var(--fw-medium);
-  //}
 `
 
 const Title = styled.h1`
@@ -165,12 +182,6 @@ const Textarea = styled.textarea`
     border-color: rgb(49, 130, 206);
     box-shadow: rgb(49 130 206) 0px 0px 0px 1px;
   }
-
-  //@media (max-width: 768px) {
-  //  &::placeholder {
-  //    font-size: 1.2rem;
-  //  }
-  //}
 `;
 
 const optionsRegion = [
@@ -364,10 +375,14 @@ const optionsManager = [
     {value: "ЭМП", label: "ЭМП"},
     {value: "ЭС", label: "ЭС"},
 ]
+const default_value = "не выбрано"
 
 const ContactForm = () => {
+    const [disabledButton, setDisabledButton] = useState(false);
+    const navigate = useNavigate()
     const {register, control, formState: {errors}, handleSubmit, reset} = useForm({mode: "onChange"})
     const onSubmit = async (data) => {
+        data && setDisabledButton(true)
         try {
             await axios.post("https://contact-form-2d4a6-default-rtdb.firebaseio.com/contact.json", [{
                 Имя: data.firstName.slice(0, 1).toUpperCase() + data.firstName.slice(1).toLowerCase(),
@@ -386,278 +401,298 @@ const ContactForm = () => {
                 "Образовательная программа": data.educationProgram,
                 "Язык обучения": data.language,
                 "Кафедра-консультант": data.manager,
-                "Вопрос": data.question,
+                "Вопрос": data.question ? data.question : "нет вопросов",
                 "Дата рождения": data.birthday,
                 "Телефон": data["phone-input"]
             }]);
-            // reset()
+            navigate("/success", {replace: true});
+            reset()
         } catch (e) {
             console.log(e);
         }
     }
 
     return (
-      <Wrapper>
-          <Body>
-              <Title>Регистрация</Title>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                  <Label>
-                      <Input placeholder="Аты (Имя)*" {...register('firstName', {
-                          required: "Поле обязательно к заполнению",
-                          minLength: {
-                              value: 2,
-                              message: "Минимум 2 символа"
-                          }
-                      })}/>
-                  </Label>
-                  <ErrorMessage>
-                      {errors?.firstName && <p>{errors?.firstName?.message || "Error!"}</p>}
-                  </ErrorMessage>
-                  <Label>
-                      <Input placeholder="Тегі (Фамилия)*" {...register('lastName', {
-                          required: "Поле обязательно к заполнению",
-                          minLength: {
-                              value: 2,
-                              message: "Минимум 2 символа"
-                          }
-                      })}/>
-                  </Label>
-                  <ErrorMessage>
-                      {errors?.lastName && <p>{errors?.lastName?.message || "Error!"}</p>}
-                  </ErrorMessage>
-                  <Label>
-                      <Input placeholder="Әкесінің аты (Отчество)*" {...register('patronymic', {
-                          required: "Поле обязательно к заполнению",
-                          minLength: {
-                              value: 2,
-                              message: "Минимум 2 символа"
-                          }
-                      })}/>
-                  </Label>
-                  <ErrorMessage>
-                      {errors?.patronymic && <p>{errors?.patronymic?.message || "Error!"}</p>}
-                  </ErrorMessage>
-                  <Label>
-                      <Input type="date" placeholder="Дата рождения" {...register('birthday')}/>
-                  </Label>
-                  <ErrorMessage></ErrorMessage>
-                  <Controller
-                    control={control}
-                    name="socialStatus"
-                    render={({field: {onChange, value, name, ref}}) => (
-                      <SelectEl
-                        placeholder="Социальный статус"
-                        inputRef={ref}
-                        classNamePrefix="addl-class"
-                        options={optionsSocialStatus}
-                        value={optionsSocialStatus.find((c) => c.value === value)}
-                        onChange={val => onChange(val.value)}
+      <Main>
+          <MainTitle>
+              Әлеуетті талапкердің жеке карточкасы/
+              Личная карточка потенциального абитуриента
+              <p>
+                  барлық деректерді жеке куәлік бойынша толтыру қажет / все данные заполнять по удостоверению личности*
+              </p>
+          </MainTitle>
+          <Wrapper>
+              <Body>
+                  <Title>Регистрация</Title>
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                      <Label>
+                          <Input placeholder="Аты (Имя)*" {...register('firstName', {
+                              required: "Поле обязательно к заполнению",
+                              minLength: {
+                                  value: 2,
+                                  message: "Минимум 2 символа"
+                              }
+                          })}/>
+                      </Label>
+                      <ErrorMessage>
+                          {errors?.firstName && <p>{errors?.firstName?.message || "Error!"}</p>}
+                      </ErrorMessage>
+                      <Label>
+                          <Input placeholder="Тегі (Фамилия)*" {...register('lastName', {
+                              required: "Поле обязательно к заполнению",
+                              minLength: {
+                                  value: 2,
+                                  message: "Минимум 2 символа"
+                              }
+                          })}/>
+                      </Label>
+                      <ErrorMessage>
+                          {errors?.lastName && <p>{errors?.lastName?.message || "Error!"}</p>}
+                      </ErrorMessage>
+                      <Label>
+                          <Input placeholder="Әкесінің аты (Отчество)*" {...register('patronymic', {
+                              required: "Поле обязательно к заполнению",
+                              minLength: {
+                                  value: 2,
+                                  message: "Минимум 2 символа"
+                              }
+                          })}/>
+                      </Label>
+                      <ErrorMessage>
+                          {errors?.patronymic && <p>{errors?.patronymic?.message || "Error!"}</p>}
+                      </ErrorMessage>
+                      <Label>
+                          <Input type="date" placeholder="Дата рождения" {...register('birthday')}/>
+                      </Label>
+                      <ErrorMessage></ErrorMessage>
+                      <Controller
+                        control={control}
+                        defaultValue={default_value}
+                        name="socialStatus"
+                        render={({field: {onChange, value, name, ref}}) => (
+                          <SelectEl
+                            placeholder="Социальный статус"
+                            inputRef={ref}
+                            classNamePrefix="addl-class"
+                            options={optionsSocialStatus}
+                            value={optionsSocialStatus.find((c) => c.value === value)}
+                            onChange={val => onChange(val.value)}
+                          />
+                        )}
                       />
-                    )}
-                  />
-                  <Label>
-                      <Input placeholder="Email*" {...register('email', {
-                          required: "Поле обязательно к заполнению",
-                          pattern: {
-                              value: /\S+@\S+\.\S+/,
-                              message: "Введенное значение не соответствует формату электронной почты"
-                          }
-                      })}/>
-                  </Label>
-                  <ErrorMessage>
-                      {errors?.email && <p>{errors?.email?.message || "Error!"}</p>}
-                  </ErrorMessage>
+                      <Label>
+                          <Input placeholder="Email*" {...register('email', {
+                              required: "Поле обязательно к заполнению",
+                              pattern: {
+                                  value: /\S+@\S+\.\S+/,
+                                  message: "Введенное значение не соответствует формату электронной почты"
+                              }
+                          })}/>
+                      </Label>
+                      <ErrorMessage>
+                          {errors?.email && <p>{errors?.email?.message || "Error!"}</p>}
+                      </ErrorMessage>
 
-                  {/*<Controller*/}
-                  {/*  name="phone-input"*/}
-                  {/*  control={control}*/}
-                  {/*  rules={{*/}
-                  {/*      validate: (value) => isPossiblePhoneNumber(value)*/}
-                  {/*  }}*/}
-                  {/*  render={({field: {onChange, value}}) => (*/}
-                  {/*    <Phone*/}
-                  {/*      value={value}*/}
-                  {/*      onChange={onChange}*/}
-                  {/*      defaultCountry="KZ"*/}
-                  {/*      id="phone-input"*/}
-                  {/*      placeholder="Телефон"*/}
-                  {/*    />*/}
-                  {/*  )}*/}
-                  {/*/>*/}
-                  {/*<ErrorMessage>*/}
-                  {/*    {errors["phone-input"] && (*/}
-                  {/*      <p className="error-message">Недействительный телефон</p>*/}
-                  {/*    )}*/}
-                  {/*</ErrorMessage>*/}
-                  <Phone
-                    name="phone-input"
-                    control={control}
-                    defaultCountry="KZ"
-                    rules={{required: true, validate: (value) => isPossiblePhoneNumber(value)}}/>
-                  <ErrorMessage>
-                      {errors["phone-input"] && (
-                        <p className="error-message">Недействительный телефон</p>
-                      )}
-                  </ErrorMessage>
+                      {/*<Controller*/}
+                      {/*  name="phone-input"*/}
+                      {/*  control={control}*/}
+                      {/*  rules={{*/}
+                      {/*      validate: (value) => isPossiblePhoneNumber(value)*/}
+                      {/*  }}*/}
+                      {/*  render={({field: {onChange, value}}) => (*/}
+                      {/*    <Phone*/}
+                      {/*      value={value}*/}
+                      {/*      onChange={onChange}*/}
+                      {/*      defaultCountry="KZ"*/}
+                      {/*      id="phone-input"*/}
+                      {/*      placeholder="Телефон"*/}
+                      {/*    />*/}
+                      {/*  )}*/}
+                      {/*/>*/}
+                      {/*<ErrorMessage>*/}
+                      {/*    {errors["phone-input"] && (*/}
+                      {/*      <p className="error-message">Недействительный телефон</p>*/}
+                      {/*    )}*/}
+                      {/*</ErrorMessage>*/}
+                      <Phone
+                        name="phone-input"
+                        control={control}
+                        defaultCountry="KZ"
+                        placeholder="Телефон"
+                        rules={{required: true, validate: (value) => isPossiblePhoneNumber(value)}}/>
+                      <ErrorMessage>
+                          {errors["phone-input"] && (
+                            <p className="error-message">Недействительный телефон</p>
+                          )}
+                      </ErrorMessage>
 
 
-                  <Controller
-                    control={control}
-                    name="region"
-                    render={({field: {onChange, value, name, ref}}) => (
-                      <SelectEl
-                        placeholder="Аймақ
+                      <Controller
+                        control={control}
+                        defaultValue={default_value}
+                        name="region"
+                        render={({field: {onChange, value, name, ref}}) => (
+                          <SelectEl
+                            placeholder="Аймақ
 													(Регион)"
-                        inputRef={ref}
-                        classNamePrefix="addl-class"
-                        options={optionsRegion}
-                        value={optionsRegion.find((c) => c.value === value)}
-                        onChange={val => onChange(val.value)}
+                            inputRef={ref}
+                            classNamePrefix="addl-class"
+                            options={optionsRegion}
+                            value={optionsRegion.find((c) => c.value === value)}
+                            onChange={val => onChange(val.value)}
+                          />
+                        )}
                       />
-                    )}
-                  />
 
-                  <Controller
-                    control={control}
-                    name="achievement"
-                    render={({field: {onChange, value, name, ref}}) => (
-                      <SelectEl
-                        placeholder="Награды и достижение"
-                        inputRef={ref}
-                        classNamePrefix="addl-class"
-                        options={optionsAchievement}
-                        value={optionsAchievement.find((c) => c.value === value)}
-                        onChange={val => onChange(val.value)}
+                      <Controller
+                        control={control}
+                        defaultValue={default_value}
+                        name="achievement"
+                        render={({field: {onChange, value, name, ref}}) => (
+                          <SelectEl
+                            placeholder="Награды и достижение"
+                            inputRef={ref}
+                            classNamePrefix="addl-class"
+                            options={optionsAchievement}
+                            value={optionsAchievement.find((c) => c.value === value)}
+                            onChange={val => onChange(val.value)}
+                          />
+                        )}
                       />
-                    )}
-                  />
 
-                  <Controller
-                    control={control}
-                    name="payment"
-                    render={({field: {onChange, value, name, ref}}) => (
-                      <SelectEl
-                        placeholder="Предполагаемая форма оплаты за обучение в ВУЗе"
-                        inputRef={ref}
-                        classNamePrefix="addl-class"
-                        options={optionsPayment}
-                        value={optionsPayment.find((c) => c.value === value)}
-                        onChange={val => onChange(val.value)}
+                      <Controller
+                        control={control}
+                        defaultValue={default_value}
+                        name="payment"
+                        render={({field: {onChange, value, name, ref}}) => (
+                          <SelectEl
+                            placeholder="Предполагаемая форма оплаты за обучение в ВУЗе"
+                            inputRef={ref}
+                            classNamePrefix="addl-class"
+                            options={optionsPayment}
+                            value={optionsPayment.find((c) => c.value === value)}
+                            onChange={val => onChange(val.value)}
+                          />
+                        )}
                       />
-                    )}
-                  />
 
-                  <Controller
-                    control={control}
-                    name="cities"
-                    render={({field: {onChange, value, name, ref}}) => (
-                      <SelectEl
-                        placeholder="Қала/кент/ауыл (Город/поселок/село)
+                      <Controller
+                        control={control}
+                        defaultValue={default_value}
+                        name="cities"
+                        render={({field: {onChange, value, name, ref}}) => (
+                          <SelectEl
+                            placeholder="Қала/кент/ауыл (Город/поселок/село)
                 "
-                        inputRef={ref}
-                        classNamePrefix="addl-class"
-                        options={optionsCities}
-                        value={optionsCities.find((c) => c.value === value)}
-                        onChange={val => onChange(val.value)}
+                            inputRef={ref}
+                            classNamePrefix="addl-class"
+                            options={optionsCities}
+                            value={optionsCities.find((c) => c.value === value)}
+                            onChange={val => onChange(val.value)}
+                          />
+                        )}
                       />
-                    )}
-                  />
 
-                  <Controller
-                    control={control}
-                    name="institutionType"
-                    render={({field: {onChange, value, name, ref}}) => (
-                      <SelectEl
-                        placeholder="Вид учебного заведения"
-                        inputRef={ref}
-                        classNamePrefix="addl-class"
-                        options={optionInstitutionType}
-                        value={optionInstitutionType.find((c) => c.value === value)}
-                        onChange={val => onChange(val.value)}
+                      <Controller
+                        control={control}
+                        defaultValue={default_value}
+                        name="institutionType"
+                        render={({field: {onChange, value, name, ref}}) => (
+                          <SelectEl
+                            placeholder="Вид учебного заведения"
+                            inputRef={ref}
+                            classNamePrefix="addl-class"
+                            options={optionInstitutionType}
+                            value={optionInstitutionType.find((c) => c.value === value)}
+                            onChange={val => onChange(val.value)}
+                          />
+                        )}
                       />
-                    )}
-                  />
 
-                  <Controller
-                    control={control}
-                    name="institution"
-                    render={({field: {onChange, value, name, ref}}) => (
-                      <SelectEl
-                        placeholder="Оқу орны (Учебное заведение)"
-                        inputRef={ref}
-                        classNamePrefix="addl-class"
-                        options={optionsInstitution}
-                        value={optionsInstitution.find((c) => c.value === value)}
-                        onChange={val => onChange(val.value)}
+                      <Controller
+                        control={control}
+                        defaultValue={default_value}
+                        name="institution"
+                        render={({field: {onChange, value, name, ref}}) => (
+                          <SelectEl
+                            placeholder="Оқу орны (Учебное заведение)"
+                            inputRef={ref}
+                            classNamePrefix="addl-class"
+                            options={optionsInstitution}
+                            value={optionsInstitution.find((c) => c.value === value)}
+                            onChange={val => onChange(val.value)}
+                          />
+                        )}
                       />
-                    )}
-                  />
 
-                  <Controller
-                    control={control}
-                    name="formStudy"
-                    render={({field: {onChange, value, name, ref}}) => (
-                      <SelectEl
-                        placeholder="Оқу түрі (Форма обучения)"
-                        inputRef={ref}
-                        classNamePrefix="addl-class"
-                        options={optionsFormStudy}
-                        value={optionsFormStudy.find((c) => c.value === value)}
-                        onChange={val => onChange(val.value)}
+                      <Controller
+                        control={control}
+                        defaultValue={default_value}
+                        name="formStudy"
+                        render={({field: {onChange, value, name, ref}}) => (
+                          <SelectEl
+                            placeholder="Оқу түрі (Форма обучения)"
+                            inputRef={ref}
+                            classNamePrefix="addl-class"
+                            options={optionsFormStudy}
+                            value={optionsFormStudy.find((c) => c.value === value)}
+                            onChange={val => onChange(val.value)}
+                          />
+                        )}
                       />
-                    )}
-                  />
 
-                  <Controller
-                    control={control}
-                    name="educationProgram"
-                    render={({field: {onChange, value, name, ref}}) => (
-                      <SelectEl
-                        placeholder="Предполагаемая образовательная программа"
-                        inputRef={ref}
-                        classNamePrefix="addl-class"
-                        options={optionsEducationProgram}
-                        value={optionsEducationProgram.find((c) => c.value === value)}
-                        onChange={val => onChange(val.value)}
+                      <Controller
+                        control={control}
+                        defaultValue={default_value}
+                        name="educationProgram"
+                        render={({field: {onChange, value, name, ref}}) => (
+                          <SelectEl
+                            placeholder="Предполагаемая образовательная программа"
+                            inputRef={ref}
+                            classNamePrefix="addl-class"
+                            options={optionsEducationProgram}
+                            value={optionsEducationProgram.find((c) => c.value === value)}
+                            onChange={val => onChange(val.value)}
+                          />
+                        )}
                       />
-                    )}
-                  />
 
-                  <Controller
-                    control={control}
-                    name="language"
-                    render={({field: {onChange, value, name, ref}}) => (
-                      <SelectEl
-                        placeholder="Оқу тілі (Язык обучения)"
-                        inputRef={ref}
-                        classNamePrefix="addl-class"
-                        options={optionsLanguage}
-                        value={optionsLanguage.find((c) => c.value === value)}
-                        onChange={val => onChange(val.value)}
+                      <Controller
+                        control={control}
+                        defaultValue={default_value}
+                        name="language"
+                        render={({field: {onChange, value, name, ref}}) => (
+                          <SelectEl
+                            placeholder="Оқу тілі (Язык обучения)"
+                            inputRef={ref}
+                            classNamePrefix="addl-class"
+                            options={optionsLanguage}
+                            value={optionsLanguage.find((c) => c.value === value)}
+                            onChange={val => onChange(val.value)}
+                          />
+                        )}
                       />
-                    )}
-                  />
 
-                  <Controller
-                    control={control}
-                    name="manager"
-                    render={({field: {onChange, value, name, ref}}) => (
-                      <SelectEl
-                        placeholder="Кафедра-консультант - от кого получена информация о ВУЗе)"
-                        inputRef={ref}
-                        classNamePrefix="addl-class"
-                        options={optionsManager}
-                        value={optionsManager.find((c) => c.value === value)}
-                        onChange={val => onChange(val.value)}
+                      <Controller
+                        control={control}
+                        defaultValue={default_value}
+                        name="manager"
+                        render={({field: {onChange, value, name, ref}}) => (
+                          <SelectEl
+                            placeholder="Кафедра-консультант - от кого получена информация о ВУЗе)"
+                            inputRef={ref}
+                            classNamePrefix="addl-class"
+                            options={optionsManager}
+                            value={optionsManager.find((c) => c.value === value)}
+                            onChange={val => onChange(val.value)}
+                          />
+                        )}
                       />
-                    )}
-                  />
-                  <Textarea placeholder="Сіздің сұрақ/жауап (Ваш вопрос/ответ)" {...register('question')}/>
-
-                  <InputSubmit type="submit"/>
-              </form>
-          </Body>
-      </Wrapper>
+                      <Textarea placeholder="Сіздің сұрақ/жауап (Ваш вопрос/ответ)" {...register('question')}/>
+                      <InputSubmit disabled={disabledButton} type="submit"/>
+                  </form>
+              </Body>
+          </Wrapper></Main>
     );
 };
 

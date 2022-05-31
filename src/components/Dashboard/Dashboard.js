@@ -21,12 +21,12 @@ const Dashboard = () => {
         } catch (e) {
             console.log(e)
         }
-    }, [])
+    }, [userData])
 
     let headings = userData.length && Object.keys(userData[0])
 
     return (
-      <div style={{marginTop: "100px", display: "flex", flexDirection: "column", alignItems: "center"}}>
+      <div style={{marginTop: "100px"}}>
           <table className="iksweb" id="emp-table">
               <thead>
               <tr>

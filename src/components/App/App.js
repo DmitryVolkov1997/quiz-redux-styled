@@ -5,6 +5,7 @@ import QuizCreator from "../QuizCreator/QuizCreator";
 import QuizList from "../QuizList/QuizList";
 import ContactForm from '../ContactForm/ContactForm';
 import Dashboard from '../Dashboard/Dashboard';
+import SuccessLogin from '../SuccessLogin/SuccessLogin';
 
 function App() {
     return (
@@ -16,6 +17,7 @@ function App() {
                   <Route path="/quiz/:id" element={<Quiz/>}/>
                   <Route path="/contact-form" element={<ContactForm/>}/>
                   <Route path="/dashboard" element={<Dashboard/>}/>
+                  <Route path="/success" element={<SuccessLogin/>}/>
                   <Route path="/" element={<QuizList/>}/>
               </Routes>
           </Layout>
