@@ -24,15 +24,19 @@ const Dashboard = () => {
         } catch (e) {
             console.log(e)
         }
-    }, [userData])
+    }, [])
 
     const lastDataIndex = currentPage * dataPerPage
     const firstDataIndex = lastDataIndex - dataPerPage
     const currentData = userData.slice(firstDataIndex, lastDataIndex)
 
+    console.log(currentData)
+
     const paginate = (pageNumber) => setCurrentPage(pageNumber)
 
-    let headings = currentData.length && Object.keys(userData[0])
+    // let headings = currentData.length && Object.keys(userData[0])
+
+    const headers = ["Имя", "Фамилия", "Отчество","Дата регистрации", "Дата рождения", "Социальный статус", "Email", "Телефон", "Город", "Регион", "Награды и достижение", "Предполагаемая форма оплаты за обучение в ВУЗе", "Вид учебного заведения", "Учебное заведение", "Образовательная программа", "Форма обучения", "Кафедра-консультант", "Язык обучения", "Вопрос"]
 
     return (
       <div style={{marginTop: "10rem", overflowX: "auto"}}>
@@ -40,7 +44,7 @@ const Dashboard = () => {
               <thead>
               <tr>
                   {
-                      headings.length ? headings.map((heading, i) => <th key={i}>{heading}</th>) : null
+                      headers.length ? headers.map((heading, i) => <th key={i}>{heading}</th>) : null
                   }
               </tr>
               </thead>
@@ -49,7 +53,7 @@ const Dashboard = () => {
                   currentData.map((item, i) =>
                     <tr key={i}>
                         {
-                            headings.length ? headings.map((heading, i) => <td key={i}>{item[heading]}</td>) : null
+                            headers.length ? headers.map((heading, i) => <td key={i}>{item[heading]}</td>) : null
                         }
                     </tr>
                   )

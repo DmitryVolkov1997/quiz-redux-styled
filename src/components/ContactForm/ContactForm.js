@@ -408,7 +408,7 @@ const ContactForm = () => {
                 Отчество: data.patronymic.slice(0, 1).toUpperCase() + data.patronymic.slice(1).toLowerCase(),
                 Email: data.email.toLowerCase(),
                 Регион: data.region,
-                "Социальный стутус": data.socialStatus,
+                "Социальный статус": data.socialStatus,
                 "Предполагаемая форма оплаты за обучение в ВУЗе": data.payment,
                 "Награды и достижение": data.achievement,
                 "Дата регистрации": new Date(),
