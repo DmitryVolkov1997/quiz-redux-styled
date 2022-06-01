@@ -394,6 +394,11 @@ const optionsManager = [
     {value: "ЭС", label: "ЭС"},
 ]
 const default_value = "не выбрано"
+let options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+}
 
 const ContactForm = () => {
     const [disabledButton, setDisabledButton] = useState(false);
@@ -411,7 +416,7 @@ const ContactForm = () => {
                 "Социальный статус": data.socialStatus,
                 "Предполагаемая форма оплаты за обучение в ВУЗе": data.payment,
                 "Награды и достижение": data.achievement,
-                "Дата регистрации": new Date(),
+                "Дата регистрации": new Date().toLocaleString('ru', options),
                 Город: data.cities,
                 "Вид учебного заведения": data.institutionType,
                 "Учебное заведение": data.institution,
