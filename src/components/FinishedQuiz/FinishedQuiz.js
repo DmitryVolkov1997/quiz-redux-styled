@@ -68,7 +68,8 @@ const FinishedQuiz = ({results, quiz}) => {
                       return (
                         <ListItem key={i}>
                             <span>{i + 1}</span>.&nbsp;
-                            {quizItem.question}
+                            <span dangerouslySetInnerHTML={{ __html: quizItem.question }} />
+                            {/*{quizItem.question}*/}
                             {
                                 results[quizItem.id] === "success" ?
                                   <IoChevronDownSharp className={classes.success}/> :

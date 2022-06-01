@@ -12,6 +12,13 @@ const ListItem = styled.li`
   margin: 0rem 0rem 1.5rem 0rem;
   cursor: pointer;
 
+  @media(max-width: 768px) {
+    span > img {
+      width: 100%;
+      height: auto;
+    }
+  }
+
   &.success {
     border: 1px solid #c3e6cb;
     color: #155724;
@@ -35,7 +42,8 @@ const AnswerItem = ({text, id, state}) => {
 
     return (
       <ListItem className={cls.join(" ")} onClick={() => dispatch(onAnswerClickHandler({id}))}>
-          {text}
+          {/*{text}*/}
+          <span dangerouslySetInnerHTML={{__html: text}}/>
       </ListItem>
     );
 };

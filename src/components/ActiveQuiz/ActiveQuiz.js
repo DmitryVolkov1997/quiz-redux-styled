@@ -20,6 +20,13 @@ const Question = styled.p`
   margin-bottom: 1rem;
   font-size: 2.2rem;
   font-weight: var(--fw-regular);
+  
+  @media(max-width: 768px) {
+    span > img {
+      width: 100%;
+      height: auto;
+    }
+  }
 `;
 
 const ActiveQuiz = ({answers, question, quizLength, answerNumber,state}) => {
@@ -28,7 +35,10 @@ const ActiveQuiz = ({answers, question, quizLength, answerNumber,state}) => {
           <NumberQuestions>
               Вопрос {answerNumber}/{quizLength}
           </NumberQuestions>
-          <Question>{question}</Question>
+          <Question>
+              {/*{question}*/}
+              <span dangerouslySetInnerHTML={{ __html: question }} />
+          </Question>
           <AnswersList answers={answers} state={state}/>
       </Wrapper>
     );
