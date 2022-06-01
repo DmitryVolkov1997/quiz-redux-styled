@@ -68,8 +68,14 @@ const FinishedQuiz = ({results, quiz}) => {
                       return (
                         <ListItem key={i}>
                             <span>{i + 1}</span>.&nbsp;
-                            <span dangerouslySetInnerHTML={{ __html: quizItem.question }} />
-                            {/*{quizItem.question}*/}
+                            {
+                                quizItem.question.includes("http") ? <img src={quizItem.question}/> :
+                                  <span dangerouslySetInnerHTML={{__html: quizItem.question}}/>
+                            }
+
+                            {/*<span dangerouslySetInnerHTML={{ __html: quizItem.question }} />*/}
+
+                            {/*{quizItem.question} было до картинок*/}
                             {
                                 results[quizItem.id] === "success" ?
                                   <IoChevronDownSharp className={classes.success}/> :

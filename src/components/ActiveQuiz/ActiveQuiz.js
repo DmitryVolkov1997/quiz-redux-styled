@@ -20,8 +20,8 @@ const Question = styled.p`
   margin-bottom: 1rem;
   font-size: 2.2rem;
   font-weight: var(--fw-regular);
-  
-  @media(max-width: 768px) {
+
+  @media (max-width: 768px) {
     span > img {
       width: 100%;
       height: auto;
@@ -29,7 +29,7 @@ const Question = styled.p`
   }
 `;
 
-const ActiveQuiz = ({answers, question, quizLength, answerNumber,state}) => {
+const ActiveQuiz = ({answers, question, quizLength, answerNumber, state}) => {
     return (
       <Wrapper>
           <NumberQuestions>
@@ -37,7 +37,11 @@ const ActiveQuiz = ({answers, question, quizLength, answerNumber,state}) => {
           </NumberQuestions>
           <Question>
               {/*{question}*/}
-              <span dangerouslySetInnerHTML={{ __html: question }} />
+              {
+                  question.includes("http") ? <img src={question}/> :
+                    <span dangerouslySetInnerHTML={{__html: question}}/>
+              }
+              {/*<span dangerouslySetInnerHTML={{ __html: question }} />*/}
           </Question>
           <AnswersList answers={answers} state={state}/>
       </Wrapper>

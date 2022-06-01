@@ -12,7 +12,7 @@ const ListItem = styled.li`
   margin: 0rem 0rem 1.5rem 0rem;
   cursor: pointer;
 
-  @media(max-width: 768px) {
+  @media (max-width: 768px) {
     span > img {
       width: 100%;
       height: auto;
@@ -43,7 +43,12 @@ const AnswerItem = ({text, id, state}) => {
     return (
       <ListItem className={cls.join(" ")} onClick={() => dispatch(onAnswerClickHandler({id}))}>
           {/*{text}*/}
-          <span dangerouslySetInnerHTML={{__html: text}}/>
+          {/*<span dangerouslySetInnerHTML={{__html: text}}/>*/}
+
+          {
+              text.includes("http") ? <img src={text}/> :
+                <span dangerouslySetInnerHTML={{__html: text}}/>
+          }
       </ListItem>
     );
 };
