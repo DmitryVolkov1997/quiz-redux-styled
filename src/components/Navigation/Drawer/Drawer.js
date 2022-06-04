@@ -5,10 +5,10 @@ import {menuCloseHandler} from "../../../store/quizSlice/quizSlice";
 import {useDispatch} from "react-redux";
 
 const links = [{
-    to: '/', label: "Список тестов"
+    to: '/quiz-list', label: "Список тестов"
 },
     {
-        to: '/auth', label: "Авторизация"
+        to: '/', label: "Регистрация"
     },
     {
         to: '/quiz-creator', label: "Создать тест"

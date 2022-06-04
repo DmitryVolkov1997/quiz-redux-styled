@@ -41,7 +41,7 @@ const MainTitle = styled.h1`
     margin-top: 1rem;
     margin-bottom: 2rem;
   }
-  
+
   & > img {
     top: .5rem;
     width: 150px;
@@ -49,7 +49,7 @@ const MainTitle = styled.h1`
     object-fit: cover;
     object-position: center;
   }
-  
+
   //& > img {
   //  position: absolute;
   //  left: -10rem;
@@ -486,7 +486,7 @@ const ContactForm = () => {
                           {errors?.patronymic && <p>{errors?.patronymic?.message || "Error!"}</p>}
                       </ErrorMessage>
                       <Label>
-                          <Input type="date" placeholder="Дата рождения" {...register('birthday')}/>
+                          <Input defaultValue="1960-01-01" type="date" placeholder="Дата рождения" {...register('birthday')}/>
                       </Label>
                       <ErrorMessage></ErrorMessage>
                       <Controller

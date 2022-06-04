@@ -6,6 +6,7 @@ import Auxillary from "../Auxillary/Auxillary";
 import {CustomSelect} from "../UI/CustomSelect/CustomSelect";
 import axios from "../../axios/axios-quiz";
 import Input from "../UI/Input/Input";
+import ActiveAdminCreator from '../ActiveAdminCreator/ActiveAdminCreator';
 
 const Wrapper = styled.div`
   display: flex;
@@ -41,7 +42,6 @@ const ButtonGroup = styled.div`
   gap: 1.5rem;
   margin-top: 1rem;
 `;
-
 
 function createOptionControl(number) {
     return createControl({
@@ -81,6 +81,8 @@ export default class QuizCreator extends Component {
         formControls: createFormControls(),
         titles: "",
         InoutTitleValue: "",
+        showActiveAdminCreator: true,
+        activeAdminPassword: ''
     };
 
     submitHandler = (e) => {
@@ -192,38 +194,60 @@ export default class QuizCreator extends Component {
         });
     };
 
+    onChangeActiveAdminPassword = (password) => {
+        this.setState({
+            activeAdminPassword: password
+        })
+    };
+
+    handleShowActiveAdminCreator = () => {
+        if (this.state.activeAdminPassword === 'kstu2022') {
+            this.setState({
+                showActiveAdminCreator: false
+            })
+        }
+    }
+
     render() {
         return (
-          <Wrapper>
-              <Body>
-                  <Title>Создать тест</Title>
-                  <Form onSubmit={this.submitHandler}>
-                      <div>
-                          <Input
-                            onChange={this.handleInputValue}
-                            value={this.state.inputTitleValue}
-                            label="Название предмета"
-                          />
-                          <Button style={{width: "100%", margin: "1rem 0 2rem"}} p={".9rem 1.7rem .9rem 1.7rem"}
-                                  primary>Добавить заголовок</Button>
-                      </div>
-                      {this.renderControls()}
-                      <CustomSelect options={options}
-                                    placeholder="Выберите правильный ответ"
-                                    onChange={(e) => this.setState({rightAnswerId: +e.value})}/>
-                      <ButtonGroup>
-                          <Button disabled={!this.state.isFormValid} full primary type="primary"
-                                  p={".9rem 1.7rem .9rem 1.7rem"}
-                                  onClick={this.addQuestionHandler}>Добавить
-                              вопрос</Button>
-                          <Button disabled={this.state.quiz.length === 0} full success type="success"
-                                  onClick={this.createQuizHandler}
-                                  p={".9rem 1.7rem .9rem 1.7rem"}>Создать
-                              тест</Button>
-                      </ButtonGroup>
-                  </Form>
-              </Body>
-          </Wrapper>
+          <>
+              {
+                  this.state.showActiveAdminCreator ?
+                    <ActiveAdminCreator
+                      onChange={this.onChangeActiveAdminPassword} onClickButton={this.handleShowActiveAdminCreator}/> :
+                    <Wrapper>
+                        <Body>
+                            <Title>Создать тест</Title>
+                            <Form onSubmit={this.submitHandler}>
+                                <div>
+                                    <Input
+                                      onChange={this.handleInputValue}
+                                      value={this.state.inputTitleValue}
+                                      label="Название предмета"
+                                    />
+                                    <Button style={{width: "100%", margin: "1rem 0 2rem"}}
+                                            p={".9rem 1.7rem .9rem 1.7rem"}
+                                            primary>Добавить заголовок</Button>
+                                </div>
+                                {this.renderControls()}
+                                <CustomSelect options={options}
+                                              placeholder="Выберите правильный ответ"
+                                              onChange={(e) => this.setState({rightAnswerId: +e.value})}/>
+                                <ButtonGroup>
+                                    <Button disabled={!this.state.isFormValid} full primary type="primary"
+                                            p={".9rem 1.7rem .9rem 1.7rem"}
+                                            onClick={this.addQuestionHandler}>Добавить
+                                        вопрос</Button>
+                                    <Button disabled={this.state.quiz.length === 0} full success type="success"
+                                            onClick={this.createQuizHandler}
+                                            p={".9rem 1.7rem .9rem 1.7rem"}>Создать
+                                        тест</Button>
+                                </ButtonGroup>
+                            </Form>
+                        </Body>
+                    </Wrapper>
+              }
+          </>
         );
     }
 }

@@ -10,7 +10,9 @@ const quizSlice = createSlice({
         menu: false,
         isFinishedQuiz: false,
         loading: true,
-        showModal: false
+        showModal: false,
+        showActiveAdmin: true,
+        activeAdminPassword: "",
     },
     reducers: {
         onAnswerClickHandler(state, {payload}) {
@@ -66,6 +68,12 @@ const quizSlice = createSlice({
         },
         setShowModal(state, {payload}) {
             state.showModal = true
+        },
+        setShowActiveAdmin(state, {payload}) {
+            state.showActiveAdmin = false
+        },
+        setActiveAdminPassword(state, {payload}) {
+            state.activeAdminPassword = payload.password
         }
     }
 });
@@ -77,6 +85,8 @@ export const {
     menuCloseHandler,
     setQuiz,
     setLoading,
-    setShowModal
+    setShowModal,
+    setShowActiveAdmin,
+    setActiveAdminPassword
 } = quizSlice.actions;
 export default quizSlice.reducer;

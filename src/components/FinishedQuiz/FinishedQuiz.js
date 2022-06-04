@@ -69,7 +69,7 @@ const FinishedQuiz = ({results, quiz}) => {
                         <ListItem key={i}>
                             <span>{i + 1}</span>.&nbsp;
                             {
-                                quizItem.question.includes("http") ? <img src={quizItem.question}/> :
+                                quizItem.question.includes("http") ? <img src={quizItem.question} alt=""/> :
                                   <span dangerouslySetInnerHTML={{__html: quizItem.question}}/>
                             }
 
@@ -94,7 +94,7 @@ const FinishedQuiz = ({results, quiz}) => {
                   <Button primary p={".9rem 1.7rem .9rem 1.7rem"}
                           onClick={() => dispatch(onRetryHandler())}>Повторить</Button>
                   <Button success p={".9rem 1.7rem .9rem 1.7rem"} onClick={() => dispatch(onRetryHandler())}>
-                      <ListLink to="/">Перейти в список тестов</ListLink>
+                      <ListLink to="/quiz-list">Перейти в список тестов</ListLink>
                   </Button>
               </ButtonGroup>
           </Border>

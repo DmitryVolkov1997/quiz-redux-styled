@@ -36,7 +36,7 @@ const Title = styled.div`
 `
 
 const Link = styled(NavLink).attrs({
-    to: '/',
+    to: '/quiz-list',
 })`
   color: rgb(25, 135, 84);
   font-size: 2rem;
@@ -65,7 +65,7 @@ const SuccessLogin = e => {
           <GroupTitle>
               <Title>Отлично</Title>
               <Title>Вы успешно вошли в систему!</Title>
-              <ButtonBack onClick={() => navigate("/contact-form", {replace: true})}>
+              <ButtonBack onClick={() => navigate("/", {replace: true})}>
                   <IoArrowBack/>
                   Back
               </ButtonBack>

@@ -31,7 +31,7 @@ const Title = styled.div`
 `
 
 const Link = styled(NavLink).attrs({
-	to: '/',
+	to: '/quiz-list',
 })`
 	color: rgb(25, 135, 84);
 	font-size: 2rem;
