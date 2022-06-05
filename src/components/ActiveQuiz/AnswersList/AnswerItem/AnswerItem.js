@@ -46,7 +46,7 @@ const AnswerItem = ({text, id, state}) => {
           {/*<span dangerouslySetInnerHTML={{__html: text}}/>*/}
 
           {
-              text.includes("http") ? <img src={text}/> :
+              text.includes("http") ? <img src={text} alt="ответ"/> :
                 <span dangerouslySetInnerHTML={{__html: text}}/>
           }
       </ListItem>

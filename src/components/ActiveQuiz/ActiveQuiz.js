@@ -38,7 +38,7 @@ const ActiveQuiz = ({answers, question, quizLength, answerNumber, state}) => {
           <Question>
               {/*{question}*/}
               {
-                  question.includes("http") ? <img src={question}/> :
+                  question.includes("http") ? <img src={question} alt="вопрос"/> :
                     <span dangerouslySetInnerHTML={{__html: question}}/>
               }
               {/*<span dangerouslySetInnerHTML={{ __html: question }} />*/}
